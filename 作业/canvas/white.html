@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			*{
+				margin: 0;
+				padding: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="canvas" width="" height=""></canvas>
+		<script type="text/javascript">
+			var canvas=document.getElementById('canvas');
+			var ctx=canvas.getContext('2d');
+			var w = document.documentElement.clientWidth;//260
+			var h = document.documentElement.clientHeight;//400
+			canvas.width = w;
+			canvas.height = h;
+			ctx.fillStyle = "#000000";
+			var arr=new Array();
+			var fno=0;
+			var timer=null;
+			function Rect(y, arr) {
+				this.y = y;
+				this.arr = arr;
+				
+			}
+			
+				for (var i = 0; i <6; i++) {
+					var arr1=new Array();
+					for(var j=0;j<4;j++){
+						arr1[j]=0
+					}//0表示白，2表示黑
+					var n=Math.floor(Math.random() * 4)
+					arr1[n]=2;
+					
+					arr[i]=new Rect(i * (h/4)- (h/2), arr1)
+					/*arr[i]=new Rect(i * 100 - 200, arr1)*/
+					console.log(arr[i])
+				}
+			
+			function drawGame(){
+				for (var i = 0; i <arr.length; i++) {
+					for (var j = 0; j < arr[i].arr.length; j++) {
+						switch(arr[i].arr[j]) {
+							case 0:
+								ctx.fillStyle = "#ffffff";
+								break;
+							case 2:
+								ctx.fillStyle = "#000000";
+								break;
+						}
+						ctx.fillRect(j * (w / 4), arr[i].y, (w / 4), (h / 4));
+						ctx.strokeStyle = "#666666";
+						ctx.strokeRect(j * (w / 4), arr[i].y, (w / 4), (h / 4));
+					}
+					
+				}
+				ctx.strokeStyle = "#000000";
+				ctx.strokeRect(0, 0, w, h);
+			}
+			function start(){
+				timer=setInterval(function(){
+					ctx.clearRect(0,0,canvas.width,canvas.height)
+					goGame()
+					fno++;
+					
+					ctx.font = "10px 微软雅黑";
+					
+					ctx.fillText(fno,0,10)
+				},0.1)
+			}
+			function goGame() {
+				drawGame();
+				for(var i = 0; i < arr.length; i++) {
+					arr[i].y++;
+					if(arr[i].y > h) {
+						
+
+						//出去了，就再利用
+						for(var j = 0; j < arr[i].arr.length; j++) {
+							arr[i].arr[j] = 0;
+						}
+						var n = Math.floor(Math.random() * 4);
+						arr[i].arr[n] = 2;
+						//放到最上面去
+						arr[i].y -= h / 4 * 6;
+					}
+
+				}
+
+			}
+			start()
+		</script>
+	</body>
+</html>
